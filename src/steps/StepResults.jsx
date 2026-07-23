@@ -13,7 +13,7 @@ import batteryProduct from "../assets/battery-product.png";
 /* ====== DEMO VALUES — replace later ====== */
 const DEMO = {
   company: "Demo Company",
-  calendarUrl: null, // client's booking link goes here later
+  calendarUrl: "https://growthlocal.com.au/schedule-solar-growth-system-demo",
   batteryRange: "15kWh and 20kWh",            // PLACEHOLDER
   rebateRange: "$5,580 – $7,440",             // PLACEHOLDER
   savingsRange: "$1,752 – $2,336",            // PLACEHOLDER
@@ -91,6 +91,8 @@ const CtaButton = ({ children }) => (
   <a
     href={DEMO.calendarUrl || "#"}
     onClick={DEMO.calendarUrl ? undefined : demoClick}
+    target={DEMO.calendarUrl ? "_blank" : undefined}
+    rel={DEMO.calendarUrl ? "noopener noreferrer" : undefined}
     style={{
       display: "inline-block",
       background: BRAND.mint,
