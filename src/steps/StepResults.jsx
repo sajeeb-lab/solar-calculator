@@ -308,7 +308,7 @@ const StepResults = ({ data }) => {
           DISCLAIMER FOR SOLAR SYSTEM QUOTE
         </h3>
         <p>
-          <u>General information:</u> the information provided through this quoting tool is for
+          <u style={{ fontWeight: 700, color: BRAND.ink }}>General information:</u> the information provided through this quoting tool is for
           general guidance only and is subject to an on-site inspection and final design by a
           certified electrician. Price and system suitability may vary based on factors including,
           but not limited to:
@@ -318,17 +318,17 @@ const StepResults = ({ data }) => {
         <p>• Compliance with applicable consumer codes and Australian solar installation regulations.</p>
         <p>• Compatibility and performance of existing or new inverters.</p>
         <p>
-          <u>Quote:</u> all price estimates are quoted in AUD (Australian Dollars) and are exclusive
+          <u style={{ fontWeight: 700, color: BRAND.ink }}>Quote:</u> all price estimates are quoted in AUD (Australian Dollars) and are exclusive
           of GST, shipping, installation, and any other duties or charges, unless explicitly stated
           otherwise. We reserve the right to correct any errors or omissions in any estimate pricing.
         </p>
         <p>
-          <u>Australian Consumer Law:</u> nothing in this disclaimer excludes, restricts, or modifies
+          <u style={{ fontWeight: 700, color: BRAND.ink }}>Australian Consumer Law:</u> nothing in this disclaimer excludes, restricts, or modifies
           any rights or remedies available under the Australian Consumer Law or other applicable
           legislation.
         </p>
         <p>
-          <u>Rebates and incentives:</u> any government rebates, incentives, or other financial
+          <u style={{ fontWeight: 700, color: BRAND.ink }}>Rebates and incentives:</u> any government rebates, incentives, or other financial
           benefits mentioned in this quote are subject to the customer meeting all eligibility
           criteria and successful application to the relevant government body or scheme
           administrator. We are not responsible for the approval or payment of any rebates or
@@ -339,7 +339,7 @@ const StepResults = ({ data }) => {
           quote if those schemes are withdrawn or changed.
         </p>
         <p>
-          <u>Exclusions:</u> this quote does not include costs associated with structural
+          <u style={{ fontWeight: 700, color: BRAND.ink }}>Exclusions:</u> this quote does not include costs associated with structural
           modifications, additional electrical work, or other unforeseen requirements unless
           explicitly stated.
         </p>
