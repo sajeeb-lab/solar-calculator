@@ -1,0 +1,125 @@
+:root {
+  --gl-header: #081C21;
+  --gl-mint: #9AE6B4;
+  --gl-teal: #2C7A6B;
+  --gl-ink: #0E2A31;
+  --gl-soft: #5B7278;
+  --gl-line: #DCE5E3;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #ffffff;
+  font-family: "Manrope", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* step transition */
+.gl-step { animation: glFade 0.45s ease both; text-align: center; width: 100%; }
+@keyframes glFade {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* state buttons + suggestions */
+.gl-statebtn:hover {
+  border-color: var(--gl-teal) !important;
+  background: #f2fbf5 !important;
+  transform: translateY(-1px);
+}
+.gl-suggestion:hover { background: #f2fbf5 !important; }
+
+/* slider */
+.gl-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  outline: none;
+}
+.gl-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gl-header);
+  border: 4px solid var(--gl-mint);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(8, 28, 33, 0.3);
+}
+.gl-range::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--gl-header);
+  border: 4px solid var(--gl-mint);
+  cursor: pointer;
+}
+
+/* satellite reveal + scan line */
+.gl-reveal {
+  position: absolute;
+  inset: 0;
+  background: var(--gl-header);
+  animation: glReveal 2.6s cubic-bezier(0.65, 0, 0.35, 1) 0.3s forwards;
+}
+@keyframes glReveal {
+  from { transform: translateX(0); }
+  to { transform: translateX(101%); }
+}
+.gl-scanline {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--gl-mint);
+  box-shadow: 0 0 18px 4px rgba(154, 230, 180, 0.8);
+  animation: glScan 2.6s cubic-bezier(0.65, 0, 0.35, 1) 0.3s forwards;
+  opacity: 0;
+}
+@keyframes glScan {
+  0% { left: 0; opacity: 1; }
+  96% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+/* spinner + checkmark pop */
+.gl-spin {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2.5px solid var(--gl-line);
+  border-top-color: var(--gl-teal);
+  animation: glSpin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes glSpin { to { transform: rotate(360deg); } }
+
+.gl-pop { animation: glPop 0.35s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+@keyframes glPop {
+  from { transform: scale(0.4); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gl-step, .gl-pop { animation-duration: 0.01s; }
+  .gl-reveal { animation-duration: 0.6s; }
+  .gl-scanline { display: none; }
+}
+
+@media (max-width: 560px) {
+  .gl-grid2 { grid-template-columns: 1fr !important; }
+}
+/* hide number input increment/decrement spinners */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
