@@ -1,64 +1,122 @@
 import { useCallback, useRef, useState } from "react";
 import Question from "../components/Question";
 import PrimaryButton from "../components/PrimaryButton";
-import { BRAND } from "../config";
+import { BRAND, GOOGLE_MAPS_API_KEY } from "../config";
 import { DEMO_ADDRESSES } from "../data/demoAddresses";
 
-/* Step 2 — address with Google Places autocomplete (AU-restricted).
-   Falls back to demo suggestions when no API key is configured. */
-const StepAddress = ({ apiReady, onNext }) => {
+/* Step 2 — address autocomplete, restricted to Australia.
+   Calls the Places API (New) REST endpoints directly:
+     POST https://places.googleapis.com/v1/places:autocomplete
+     GET  https://places.googleapis.com/v1/places/{id}   (for coordinates)
+   No Google JS SDK is loaded — the key only needs "Places API (New)"
+   (plus "Maps Static API" for the satellite image later).
+   With no API key configured, falls back to demo suggestions. */
+const StepAddress = ({ onNext }) => {
   const [text, setText] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [selected, setSelected] = useState(null);
-  const svcRef = useRef(null);
+  const lastQueryRef = useRef("");
 
-  const search = useCallback(
-    (q) => {
-      if (q.trim().length < 3) {
-        setSuggestions([]);
+  const search = useCallback(async (q) => {
+    lastQueryRef.current = q;
+    if (q.trim().length < 3) {
+      setSuggestions([]);
+      return;
+    }
+
+    /* --- live mode: Places API (New) REST --- */
+    if (GOOGLE_MAPS_API_KEY) {
+      try {
+        const res = await fetch(
+          "https://places.googleapis.com/v1/places:autocomplete",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Goog-Api-Key": GOOGLE_MAPS_API_KEY,
+            },
+            body: JSON.stringify({
+              input: q,
+              includedRegionCodes: ["au"],
+            }),
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          console.error("Places autocomplete error:", data.error || data);
+          return;
+        }
+        if (lastQueryRef.current !== q) return; // stale response, ignore
+        setSuggestions(
+          (data.suggestions || [])
+            .filter((s) => s.placePrediction)
+            .map((s) => ({
+              main:
+                s.placePrediction.structuredFormat?.mainText?.text ||
+                s.placePrediction.text?.text ||
+                "",
+              secondary:
+                s.placePrediction.structuredFormat?.secondaryText?.text || "",
+              placeId: s.placePrediction.placeId,
+            }))
+        );
+        return;
+      } catch (err) {
+        console.error("Places autocomplete request failed:", err);
         return;
       }
-      if (apiReady && window.google?.maps?.places) {
-        if (!svcRef.current) {
-          svcRef.current = new window.google.maps.places.AutocompleteService();
-        }
-        svcRef.current.getPlacePredictions(
-          { input: q, componentRestrictions: { country: "au" } },
-          (preds) =>
-            setSuggestions(
-              (preds || []).map((p) => ({
-                main: p.structured_formatting.main_text,
-                secondary: p.structured_formatting.secondary_text,
-                placeId: p.place_id,
-              }))
-            )
-        );
-      } else {
-        const ql = q.toLowerCase();
-        setSuggestions(
-          DEMO_ADDRESSES.filter(
-            (a) =>
-              a.main.toLowerCase().includes(ql) ||
-              a.secondary.toLowerCase().includes(ql) ||
-              ql.length >= 3
-          ).slice(0, 4)
-        );
-      }
-    },
-    [apiReady]
-  );
+    }
 
-  const pick = (s) => {
+    /* --- demo mode --- */
+    const ql = q.toLowerCase();
+    setSuggestions(
+      DEMO_ADDRESSES.filter(
+        (a) =>
+          a.main.toLowerCase().includes(ql) ||
+          a.secondary.toLowerCase().includes(ql) ||
+          ql.length >= 3
+      ).slice(0, 4)
+    );
+  }, []);
+
+  const pick = async (s) => {
     setText(`${s.main}, ${s.secondary}`);
     setSuggestions([]);
-    if (s.placeId && apiReady) {
-      new window.google.maps.Geocoder().geocode({ placeId: s.placeId }, (res) => {
-        const loc = res?.[0]?.geometry?.location;
-        setSelected({ ...s, lat: loc?.lat(), lng: loc?.lng() });
-      });
-    } else {
-      setSelected(s);
+
+    /* live mode: fetch coordinates via Place Details (New) */
+    if (s.placeId && GOOGLE_MAPS_API_KEY) {
+      try {
+        const res = await fetch(
+          `https://places.googleapis.com/v1/places/${s.placeId}`,
+          {
+            headers: {
+              "X-Goog-Api-Key": GOOGLE_MAPS_API_KEY,
+              "X-Goog-FieldMask": "location",
+            },
+          }
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          console.error("Place details error:", data.error || data);
+          setSelected({ main: s.main, secondary: s.secondary });
+          return;
+        }
+        setSelected({
+          main: s.main,
+          secondary: s.secondary,
+          lat: data.location?.latitude,
+          lng: data.location?.longitude,
+        });
+        return;
+      } catch (err) {
+        console.error("Place details request failed:", err);
+        setSelected({ main: s.main, secondary: s.secondary });
+        return;
+      }
     }
+
+    /* demo mode */
+    setSelected(s);
   };
 
   return (
@@ -104,7 +162,7 @@ const StepAddress = ({ apiReady, onNext }) => {
           >
             {suggestions.map((s, i) => (
               <button
-                key={i}
+                key={s.placeId || i}
                 onClick={() => pick(s)}
                 className="gl-suggestion"
                 style={{

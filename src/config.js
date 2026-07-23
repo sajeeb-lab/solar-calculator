@@ -11,7 +11,8 @@
    - Geocoding API
    Restrict the key to your domains (see project README).
    ============================================================ */
-export const GOOGLE_MAPS_API_KEY = ""; // e.g. "AIzaSy..."
+export const GOOGLE_MAPS_API_KEY =
+  import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""; // set in client/.env
 
 export const BRAND = {
   headerBg: "#081C21",

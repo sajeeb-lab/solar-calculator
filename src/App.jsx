@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { BRAND, GOOGLE_MAPS_API_KEY } from "./config";
-import { useGoogleMaps } from "./hooks/useGoogleMaps";
 import Logo from "./components/Logo";
 import Question from "./components/Question";
 import PrimaryButton from "./components/PrimaryButton";
@@ -22,19 +21,38 @@ export default function App() {
     systemKw: 7,
     lead: null,
   });
-  const apiReady = useGoogleMaps(GOOGLE_MAPS_API_KEY);
 
   const restart = () => {
     setData({ state: null, address: null, bill: 125, systemKw: 7, lead: null });
     setStep(0);
   };
 
-  const submitLead = (lead) => {
-    const payload = { ...data, lead, submittedAt: new Date().toISOString() };
-    // PLACEHOLDER: replace with a real endpoint / CRM integration next phase.
-    console.log("LEAD SUBMISSION:", payload);
-    setData(payload);
-    setStep(6);
+  const submitLead = async (lead) => {
+    const payload = {
+      state: data.state,
+      address: data.address,
+      bill: data.bill,
+      systemKw: data.systemKw,
+      lead,
+    };
+    try {
+      const res = await fetch("/api/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const out = await res.json();
+      if (!res.ok) {
+        console.error("Lead submission rejected:", out.errors);
+        alert("Something went wrong submitting your details. Please check the form and try again.");
+        return;
+      }
+      setData((d) => ({ ...d, lead }));
+      setStep(6);
+    } catch (err) {
+      console.error("Lead submission failed:", err);
+      alert("Could not reach the server. Please try again in a moment.");
+    }
   };
 
   const steps = [
@@ -47,7 +65,6 @@ export default function App() {
     />,
     <StepAddress
       key="s1"
-      apiReady={apiReady}
       onNext={(address) => {
         setData((d) => ({ ...d, address }));
         setStep(2);

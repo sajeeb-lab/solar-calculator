@@ -1,74 +1,59 @@
-# Growth Local — Solar & Battery Estimate Calculator
+# Growth Local — Solar Calculator (Vercel version)
 
-A 6-step lead-generation calculator built with React + Vite. Single-page app:
-steps swap in place with no page reloads.
+Single-deployment version: the React app AND the API run on Vercel together.
 
-## Quick start
+```
+src/        React frontend (the 6-step calculator)
+api/        Vercel serverless functions
+  health.js   GET  /api/health
+  leads.js    GET/POST /api/leads
+```
+
+## Deploy to Vercel (GitHub route — recommended)
+
+1. Push this folder to a GitHub repository.
+2. Go to https://vercel.com -> Add New -> Project -> Import the repo.
+3. Vercel auto-detects Vite. Before deploying, open "Environment Variables"
+   and add:
+   - Name:  `VITE_GOOGLE_MAPS_API_KEY`
+   - Value: your Google Maps API key
+4. Click Deploy. Your app is live at `https://<project>.vercel.app`
+   with the API at `https://<project>.vercel.app/api/leads`.
+
+### Alternative: CLI (no GitHub needed)
+
+```bash
+npm i -g vercel
+vercel          # from this folder; follow the prompts
+vercel env add VITE_GOOGLE_MAPS_API_KEY
+vercel --prod
+```
+
+## After deploying — Google key restrictions
+
+In Google Cloud Console -> Credentials -> your key -> Application
+restrictions -> Websites, add:
+
+```
+https://<project>.vercel.app/*
+```
+
+(plus `http://localhost:*` for local development).
+
+## Local development
 
 ```bash
 npm install
-npm run dev
+npx vercel dev      # runs frontend AND the /api functions locally
 ```
 
-Then open the URL Vite prints (usually http://localhost:5173).
+(`npm run dev` runs only the frontend; /api calls will 404 without
+`vercel dev`.) Create `.env` from `.env.example` for the key locally.
 
-## The flow
+## Lead storage note
 
-1. **State** — Queensland / New South Wales / Victoria / South Australia
-   (auto-advances on click)
-2. **Address** — Google Places autocomplete, restricted to Australia
-3. **Monthly power bill** — slider + synced input, $50–$3,000
-4. **Solar system size** — slider + synced input, 3–30 kW
-5. **Calculating** — satellite image reveals left-to-right with a scan line,
-   three checklist items complete one by one, then auto-advances
-6. **Lead form** — name, email, +61 phone, consent checkbox →
-   "GET MY QUOTE NOW"
-
-The restart icon (top-left) resets to step 1. A mint progress bar under the
-header tracks completion.
-
-## Google Maps API key
-
-Paste your key into `src/config.js`:
-
-```js
-export const GOOGLE_MAPS_API_KEY = "AIzaSy...";
-```
-
-**Without a key the app runs in demo mode** — sample address suggestions and
-an illustrated property placeholder — so the full flow is testable
-immediately.
-
-The key needs these APIs enabled: **Places API**, **Maps Static API**,
-**Geocoding API**. Restrict the key to your domains (add `http://localhost:*`
-for development) and cap daily quotas in Google Cloud Console to guarantee
-you're never billed unexpectedly.
-
-## Lead submission (placeholder)
-
-Submissions are currently logged to the browser console — see `submitLead()`
-in `src/App.jsx`. Replace the `console.log` with your endpoint / CRM call in
-the next phase.
-
-## Project structure
-
-```
-src/
-  config.js            API key, brand colors, states list
-  App.jsx              Layout shell, step routing, app state
-  index.css            Global styles + animations
-  assets/logo.png      Growth Local logo (client-supplied)
-  components/          Logo, PrimaryButton, Question, SliderInput
-  steps/               StepState, StepAddress, StepCalculating,
-                       StepLead, StepDone
-  hooks/useGoogleMaps.js
-  data/demoAddresses.js
-```
-
-## Build for production
-
-```bash
-npm run build
-```
-
-Output goes to `dist/` — deploy to any static host (Vercel, Netlify, etc.).
+Serverless functions are stateless: leads are validated and logged
+(Vercel -> Deployments -> Functions -> Logs) but not durably stored yet.
+The database phase adds persistence. For long-term architecture with a
+database, the separate Express-server version of this project remains the
+base.

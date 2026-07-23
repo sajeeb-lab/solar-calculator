@@ -6,9 +6,15 @@ const ITEMS = ["Processing property data", "Checking on local pricing", "Prepari
 
 /* Step 5 — the "scan" screen.
    A dark overlay sweeps left → right revealing the satellite image,
-   then the three checklist items complete one by one, then auto-advance. */
+   then the three checklist items complete one by one, then auto-advance.
+
+   The satellite image is requested at zoom 21 (single-property framing,
+   like "that's MY roof") with scale=2 for a sharp retina image. If zoom 21
+   imagery isn't available for the area and the request errors, it falls
+   back to zoom 20 automatically. */
 const StepCalculating = ({ address, onDone }) => {
   const [checks, setChecks] = useState([false, false, false]);
+  const [zoom, setZoom] = useState(21);
 
   useEffect(() => {
     const t = [
@@ -22,7 +28,7 @@ const StepCalculating = ({ address, onDone }) => {
 
   const hasCoords = address?.lat != null && GOOGLE_MAPS_API_KEY;
   const satUrl = hasCoords
-    ? `https://maps.googleapis.com/maps/api/staticmap?center=${address.lat},${address.lng}&zoom=20&size=640x640&maptype=satellite&key=${GOOGLE_MAPS_API_KEY}`
+    ? `https://maps.googleapis.com/maps/api/staticmap?center=${address.lat},${address.lng}&zoom=${zoom}&size=640x640&scale=2&maptype=satellite&key=${GOOGLE_MAPS_API_KEY}`
     : null;
 
   return (
@@ -64,6 +70,9 @@ const StepCalculating = ({ address, onDone }) => {
             <img
               src={satUrl}
               alt="Satellite view of your property"
+              onError={() => {
+                if (zoom > 20) setZoom(20); // area lacks zoom-21 imagery
+              }}
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
