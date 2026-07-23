@@ -90,7 +90,6 @@ export default function App() {
     <Question
       key="s3"
       title="Approximately, what size is your solar system?"
-      subtitle="A rough guess is fine — most homes are around 6–7 kW."
     >
       <SliderInput
         min={3}
