@@ -4,8 +4,8 @@ import { BRAND, STATES } from "../config";
 /* Step 1 — pick a state. Auto-advances on click. */
 const StepState = ({ onSelect }) => (
   <Question
-    title="Instantly check your solar estimate & rebate"
-    subtitle="Free energy savings report included"
+    title="Instantly Check Your Battery Estimate & Rebate!"
+    subtitle="Battery Energy Savings Report included"
   >
     <div
       style={{
