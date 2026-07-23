@@ -75,7 +75,7 @@ const StepLead = ({ onSubmit }) => {
   };
 
   return (
-    <Question title="Your estimate & rebate will display on the next screen">
+    <Question title="Your estimate and rebate will display on the next screen.">
       <div
         style={{
           maxWidth: 560,
