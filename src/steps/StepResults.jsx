@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Question from "../components/Question";
-import { BRAND, GOOGLE_MAPS_API_KEY } from "../config";
+import { BRAND } from "../config";
+import batteryProduct from "../assets/battery-product.png";
 
 /* Step 7 — the results / report page, shown after the lead form.
    STATIC VERSION: every figure below is a hard-coded placeholder
@@ -110,17 +111,11 @@ const CtaButton = ({ children }) => (
 
 const StepResults = ({ data }) => {
   const address = data?.address;
-  const [zoom, setZoom] = useState(21);
 
   /* the report is long — always open it from the top */
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
-
-  const hasCoords = address?.lat != null && GOOGLE_MAPS_API_KEY;
-  const heroUrl = hasCoords
-    ? `https://maps.googleapis.com/maps/api/staticmap?center=${address.lat},${address.lng}&zoom=${zoom}&size=640x640&scale=2&maptype=satellite&key=${GOOGLE_MAPS_API_KEY}`
-    : null;
 
   return (
     <div className="gl-step" style={{ textAlign: "center", width: "100%" }}>
@@ -136,7 +131,7 @@ const StepResults = ({ data }) => {
           margin: "0 0 14px",
         }}
       >
-        Your Solar &amp; Battery Rebate Report
+        Your Battery Rebate Report
       </h1>
       {address && (
         <p
@@ -152,38 +147,18 @@ const StepResults = ({ data }) => {
         </p>
       )}
 
-      {/* hero: the customer's own roof (personalized), demo illustration otherwise */}
+      {/* hero: always the battery product image */}
       <div
         style={{
-          width: "min(360px, 82vw)",
-          height: "min(360px, 82vw)",
+          width: "min(420px, 90vw)",
           margin: "0 auto 56px",
-          borderRadius: "32px 32px 120px 120px",
-          overflow: "hidden",
-          background: BRAND.headerBg,
-          boxShadow: "0 22px 60px rgba(8,28,33,.28)",
-          border: `6px solid ${BRAND.mint}`,
         }}
       >
-        {heroUrl ? (
-          <img
-            src={heroUrl}
-            alt="Satellite view of your property"
-            onError={() => zoom > 20 && setZoom(20)}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        ) : (
-          <svg viewBox="0 0 300 300" style={{ width: "100%", height: "100%" }} aria-label="Solar report illustration">
-            <rect width="300" height="300" fill={BRAND.headerBg} />
-            <circle cx="230" cy="70" r="34" fill={BRAND.mint} opacity="0.9" />
-            <rect x="55" y="130" width="190" height="110" rx="8" fill="#123039" />
-            <polygon points="45,130 150,70 255,130" fill="#1B4450" />
-            <rect x="80" y="95" width="60" height="34" rx="3" fill={BRAND.mint} opacity="0.85" transform="rotate(-19 110 112)" />
-            <rect x="150" y="95" width="60" height="34" rx="3" fill={BRAND.mint} opacity="0.85" transform="rotate(-19 180 112)" />
-            <rect x="200" y="165" width="34" height="60" rx="6" fill={BRAND.mint} opacity="0.9" />
-            <rect x="0" y="252" width="300" height="48" fill="#0B242B" />
-          </svg>
-        )}
+        <img
+          src={batteryProduct}
+          alt="Recommended home battery system"
+          style={{ width: "100%", height: "auto", display: "block" }}
+        />
       </div>
 
       {/* ===== Personal assessment ===== */}
