@@ -8,7 +8,7 @@ import StepState from "./steps/StepState";
 import StepAddress from "./steps/StepAddress";
 import StepCalculating from "./steps/StepCalculating";
 import StepLead from "./steps/StepLead";
-import StepDone from "./steps/StepDone";
+import StepResults from "./steps/StepResults";
 
 const TOTAL_STEPS = 6;
 
@@ -105,7 +105,7 @@ export default function App() {
     </Question>,
     <StepCalculating key="s4" address={data.address} onDone={() => setStep(5)} />,
     <StepLead key="s5" onSubmit={submitLead} />,
-    <StepDone key="s6" />,
+    <StepResults key="s6" data={data} />,
   ];
 
   return (
