@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import Question from "../components/Question";
 import { BRAND } from "../config";
 import batteryProduct from "../assets/battery-product.png";
+import { calculateEstimate, fmtCurrencyRange, fmtKwhRange } from "../data/rebateEstimate";
 
 /* Step 7 — the results / report page, shown after the lead form.
    STATIC VERSION: every figure below is a hard-coded placeholder
@@ -14,11 +15,8 @@ import batteryProduct from "../assets/battery-product.png";
 const DEMO = {
   company: "Solar Growth System",
   calendarUrl: "https://growthlocal.com.au/schedule-solar-growth-system-demo",
-  batteryRange: "15kWh and 20kWh",            // PLACEHOLDER
-  rebateRange: "$5,580 – $7,440",             // PLACEHOLDER
-  savingsRange: "$1,752 – $2,336",            // PLACEHOLDER
-  priceBefore: "$17,399 – $20,281",           // PLACEHOLDER
-  priceAfter: "$11,819 – $12,841",            // PLACEHOLDER
+  // battery size, rebate, savings, and cost figures are now calculated
+  // live from the customer's bill and state — see calculateEstimate()
   email: "info@growthlocal.com.au",
   phone: "(+61) 03 4427 7546",
   postal: "Ground Floor/470 St Kilda Rd, Melbourne, VIC, 3004",
@@ -119,6 +117,17 @@ const StepResults = ({ data }) => {
     window.scrollTo({ top: 0, behavior: "instant" });
   }, []);
 
+  const estimate = useMemo(
+    () => calculateEstimate(data?.bill, data?.state),
+    [data?.bill, data?.state]
+  );
+
+  const batteryRangeText = fmtKwhRange(estimate.batteryMin, estimate.batteryMax);
+  const rebateRangeText = fmtCurrencyRange(estimate.rebateMin, estimate.rebateMax);
+  const savingsRangeText = fmtCurrencyRange(estimate.savingsMin, estimate.savingsMax);
+  const priceBeforeText = fmtCurrencyRange(estimate.costBeforeMin, estimate.costBeforeMax);
+  const priceAfterText = fmtCurrencyRange(estimate.costAfterMin, estimate.costAfterMax);
+
   return (
     <div className="gl-step" style={{ textAlign: "center", width: "100%" }}>
       {/* ===== Report header ===== */}
@@ -178,8 +187,9 @@ const StepResults = ({ data }) => {
         Your personal assessment and recommendations prepared by {DEMO.company} energy experts
       </h2>
       <Body>
-        Based on your current solar system, {DEMO.company} recommends a home battery with between{" "}
-        {DEMO.batteryRange} of storage capacity for your property. Our team has selected a range of
+        Based on your average monthly power bill, {DEMO.company} recommends a home battery with
+        between{" "}
+        {batteryRangeText} of storage capacity for your property. Our team has selected a range of
         high-quality battery options to choose from, and our energy experts are happy to help you
         find the best fit for your home.
       </Body>
@@ -195,7 +205,7 @@ const StepResults = ({ data }) => {
       {/* ===== Rebates ===== */}
       <SectionTitle>Rebates</SectionTitle>
       <BigFigure>
-        Federal Battery Rebate (Cheaper Home Battery Scheme, since 1 July 2025): {DEMO.rebateRange}
+        Federal Battery Rebate (Cheaper Home Battery Scheme, since 1 July 2025): {rebateRangeText}
       </BigFigure>
       <Body>
         The Australian Federal Government wants more Australians to have access to affordable, clean
@@ -216,7 +226,7 @@ const StepResults = ({ data }) => {
 
       {/* ===== Energy cost savings ===== */}
       <SectionTitle>Energy Cost Savings</SectionTitle>
-      <BigFigure>Estimated Annual Savings: {DEMO.savingsRange}</BigFigure>
+      <BigFigure>Estimated Annual Savings: {savingsRangeText}</BigFigure>
       <Body>
         During the day, your solar system generates electricity at low cost — but if you don&apos;t
         use it right away, it gets sent back to the grid for a small return. Once the sun sets,
@@ -229,8 +239,8 @@ const StepResults = ({ data }) => {
 
       {/* ===== Battery costs ===== */}
       <SectionTitle>Estimated Battery Costs</SectionTitle>
-      <BigFigure>Price Before Rebate: {DEMO.priceBefore}</BigFigure>
-      <BigFigure>Price After Rebate: {DEMO.priceAfter}</BigFigure>
+      <BigFigure>Price Before Rebate: {priceBeforeText}</BigFigure>
+      <BigFigure>Price After Rebate: {priceAfterText}</BigFigure>
 
       {/* ===== Dark CTA banner ===== */}
       <div
