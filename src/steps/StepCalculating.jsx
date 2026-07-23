@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import Question from "../components/Question";
+import PrimaryButton from "../components/PrimaryButton";
 import { BRAND, GOOGLE_MAPS_API_KEY } from "../config";
 
 const ITEMS = ["Processing property data", "Checking on local pricing", "Preparing insights"];
 
 /* Step 5 — the "scan" screen.
    A dark overlay sweeps left → right revealing the satellite image,
-   then the three checklist items complete one by one, then auto-advance.
+   then the three checklist items complete one by one. Once all three
+   are checked, a "Next" button appears — the user advances manually
+   rather than the screen auto-navigating.
 
    The satellite image is requested at zoom 21 (single-property framing,
    like "that's MY roof") with scale=2 for a sharp retina image. If zoom 21
@@ -15,16 +18,16 @@ const ITEMS = ["Processing property data", "Checking on local pricing", "Prepari
 const StepCalculating = ({ address, onDone }) => {
   const [checks, setChecks] = useState([false, false, false]);
   const [zoom, setZoom] = useState(21);
+  const allDone = checks.every(Boolean);
 
   useEffect(() => {
     const t = [
       setTimeout(() => setChecks([true, false, false]), 1800),
       setTimeout(() => setChecks([true, true, false]), 3100),
       setTimeout(() => setChecks([true, true, true]), 4400),
-      setTimeout(onDone, 5600),
     ];
     return () => t.forEach(clearTimeout);
-  }, [onDone]);
+  }, []);
 
   const hasCoords = address?.lat != null && GOOGLE_MAPS_API_KEY;
   const satUrl = hasCoords
@@ -32,7 +35,7 @@ const StepCalculating = ({ address, onDone }) => {
     : null;
 
   return (
-    <Question title="Calculating your estimate & rebate...">
+    <Question title="Calculating your rebate and battery estimate...">
       <p
         style={{
           letterSpacing: "0.14em",
@@ -128,6 +131,12 @@ const StepCalculating = ({ address, onDone }) => {
           ))}
         </div>
       </div>
+
+      {allDone && (
+        <div className="gl-pop" style={{ marginTop: 44 }}>
+          <PrimaryButton onClick={onDone}>Next</PrimaryButton>
+        </div>
+      )}
     </Question>
   );
 };
