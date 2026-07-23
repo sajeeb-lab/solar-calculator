@@ -12,16 +12,16 @@ import batteryProduct from "../assets/battery-product.png";
 
 /* ====== DEMO VALUES — replace later ====== */
 const DEMO = {
-  company: "Demo Company",
+  company: "Solar Growth System",
   calendarUrl: "https://growthlocal.com.au/schedule-solar-growth-system-demo",
   batteryRange: "15kWh and 20kWh",            // PLACEHOLDER
   rebateRange: "$5,580 – $7,440",             // PLACEHOLDER
   savingsRange: "$1,752 – $2,336",            // PLACEHOLDER
   priceBefore: "$17,399 – $20,281",           // PLACEHOLDER
   priceAfter: "$11,819 – $12,841",            // PLACEHOLDER
-  email: "support@demo-company.com.au",       // DEMO — replace
-  phone: "1300 000 000",                      // DEMO — replace
-  postal: "PO Box 000, Demo Suburb, STATE 0000", // DEMO — replace
+  email: "info@growthlocal.com.au",
+  phone: "(+61) 03 4427 7546",
+  postal: "Ground Floor/470 St Kilda Rd, Melbourne, VIC, 3004",
 };
 
 const demoClick = (e) => {
@@ -343,9 +343,9 @@ const StepResults = ({ data }) => {
         <p>
           <a href={`mailto:${DEMO.email}`} style={{ color: BRAND.teal }}>{DEMO.email}</a>
         </p>
-        <p>
-          {DEMO.phone} — {DEMO.postal}
-        </p>
+        <p style={{ margin: "0 0 4px" }}>{DEMO.company}</p>
+        <p style={{ margin: "0 0 4px" }}>{DEMO.postal}</p>
+        <p style={{ margin: 0 }}>{DEMO.phone}</p>
       </div>
     </div>
   );
