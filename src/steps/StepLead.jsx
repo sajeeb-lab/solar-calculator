@@ -172,7 +172,7 @@ const StepLead = ({ onSubmit }) => {
               }}
               style={{ marginTop: 3, accentColor: BRAND.teal }}
             />
-            <span>I agree to be contacted about my solar estimate and accept the privacy policy. *</span>
+            <span>I agree to the T&amp;C&apos;s and to be contacted by a Solar Growth Representative. *</span>
           </label>
           <ErrorText>{show("consent")}</ErrorText>
         </div>
