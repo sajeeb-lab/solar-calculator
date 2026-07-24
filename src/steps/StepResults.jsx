@@ -187,20 +187,26 @@ const StepResults = ({ data }) => {
           lineHeight: 1.35,
         }}
       >
-        Your personal assessment and recommendations prepared by {DEMO.company} energy experts
+        Your personal assessment and recommendations prepared by {DEMO.company} Energy Experts
       </h2>
       <Body>
-        Based on your average monthly power bill, {DEMO.company} recommends a home battery with
-        between{" "}
-        {batteryRangeText} of storage capacity for your property. Our team has selected a range of
-        high-quality battery options to choose from, and our energy experts are happy to help you
-        find the best fit for your home.
+        Based on your current solar system, {DEMO.company} recommends a home battery with between{" "}
+        {batteryRangeText} of storage capacity for your property. {DEMO.company} offers a carefully
+        selected range of high-quality battery options for you to choose from. {DEMO.company}&apos;s
+        energy experts are happy to help you with finding the best fit for your home.
       </Body>
       <Body>
-        Using your current energy usage, we&apos;ve modelled your estimated annual savings, the
-        government rebates you may qualify for, and your final out-of-pocket cost after incentives —
-        giving you a clear, transparent view of the financial benefits of adding a battery to your
-        solar investment.
+        Based on your current energy usage and our analysis, please find below a few helpful
+        estimates that are designed to help you on your journey to take control of your power bills.
+        We&apos;ve included your estimated annual savings, estimated government rebates, and
+        out-of-pocket costs after government incentives, giving you a clear view of the financial
+        benefits.
+      </Body>
+      <Body>
+        We&apos;ve modelled your estimated annual savings, rebates, and final out-of-pocket costs
+        after government incentives. These figures are shown in detail below, giving you a
+        transparent view of the financial benefits and total return from adding a battery system to
+        your solar investment.
       </Body>
 
       <Divider />
@@ -211,10 +217,10 @@ const StepResults = ({ data }) => {
         Federal Battery Rebate (Cheaper Home Battery Scheme, since 1 July 2025): {DEMO.staticRebateRange}
       </BigFigure>
       <Body>
-        The Australian Federal Government wants more Australians to have access to affordable, clean
-        energy — and it&apos;s making that easier by offering rebates when you add a battery to your
-        solar system. It supports a more reliable power grid, and more importantly, it helps you save
-        on your energy bills.
+        The Australian Federal Government wants more Australians to have access to affordable and
+        clean energy, and they&apos;re making it easier by offering rebates when you add a battery to
+        your solar system. It helps support a more reliable power grid, and more importantly, it
+        helps you save on your energy bills.
       </Body>
       <Body>
         If you&apos;re expanding an existing solar PV system or adding a new one, you may be able to
@@ -232,10 +238,10 @@ const StepResults = ({ data }) => {
       <BigFigure>Estimated Annual Savings: {savingsRangeText}</BigFigure>
       <Body>
         During the day, your solar system generates electricity at low cost — but if you don&apos;t
-        use it right away, it gets sent back to the grid for a small return. Once the sun sets,
-        you&apos;re buying electricity back at peak rates. With a home battery you can store that
-        energy and use it later, especially at night and during peak hours — relying less on your
-        energy provider and saving more on your power bills every month.
+        use it right away, it gets sent back to the grid for a small return. Once the sun has set you
+        then are buying electricity at peak rates. With a home battery, you can store that energy and
+        use it later, especially at night or in peak hours. That means you rely less on your energy
+        provider and save more on your power bills every month.
       </Body>
 
       <Divider />
@@ -298,14 +304,14 @@ const StepResults = ({ data }) => {
           DISCLAIMER FOR SOLAR SYSTEM QUOTE
         </h3>
         <p>
-          <u style={{ fontWeight: 700, color: BRAND.ink }}>General information:</u> the information provided through this quoting tool is for
-          general guidance only and is subject to an on-site inspection and final design by a
-          certified electrician. Price and system suitability may vary based on factors including,
-          but not limited to:
+          <u style={{ fontWeight: 700, color: BRAND.ink }}>General information:</u> the information
+          provided in this quote through our battery quoting system is for general guidance only and
+          subject to an on-site inspection and final design by a certified electrician. Price and
+          system suitability may vary based on factors including, but not limited to:
         </p>
         <p>• Shading, roof pitch, access, and other site-specific factors.</p>
         <p>• Size and configuration of your existing solar system, if any.</p>
-        <p>• Compliance with applicable consumer codes and Australian solar installation regulations.</p>
+        <p>• Compliance with the New Energy Tech Consumer Code (&quot;the Code&quot;) standards and Australian solar installation regulations.</p>
         <p>• Compatibility and performance of existing or new inverters.</p>
         <p>
           <u style={{ fontWeight: 700, color: BRAND.ink }}>Quote:</u> all price estimates are quoted in AUD (Australian Dollars) and are exclusive
@@ -325,8 +331,10 @@ const StepResults = ({ data }) => {
           incentives, and the quoted price is not conditional on the receipt of such rebates unless
           explicitly stated and agreed upon in writing. It is the customer&apos;s responsibility to
           verify their eligibility and the current terms of any applicable schemes. Discounts
-          dependent on government incentive schemes may be increased, decreased or removed from a
-          quote if those schemes are withdrawn or changed.
+          provided for STC&apos;s or other Federal or State Government incentives are dependent on
+          rebate schemes being approved, active and available at the time of system commissioning.
+          Discounts may be increased, decreased or removed from a quote if Government rebate schemes
+          are withdrawn or changed.
         </p>
         <p>
           <u style={{ fontWeight: 700, color: BRAND.ink }}>Exclusions:</u> this quote does not include costs associated with structural
@@ -338,20 +346,22 @@ const StepResults = ({ data }) => {
           PRIVACY AND DATA USE
         </h3>
         <p>
-          Your privacy is important to us. Our Privacy Policy outlines how we collect, use, store and
-          disclose your personal information. You can view the policy here:{" "}
+          Your privacy is important to us. {DEMO.company}&apos;s Privacy and Credit Reporting Policy
+          outlines how we collect, use, store and disclose your personal information. You can
+          download the policy below:{" "}
           <a href="#" onClick={demoClick} style={{ color: BRAND.teal }}>
-            Privacy Policy — {DEMO.company}
+            Privacy and Credit Reporting Policy - {DEMO.company}.
           </a>
         </p>
         <p>
-          We comply with the Australian Privacy Act 1988 and relevant energy and consumer protection
-          laws, including the Competition and Consumer Act 2010, the Do Not Call Register Act 2006,
+          We comply with the Australian Privacy Act 1988, and relevant energy and consumer protection
+          laws. This includes the Competition and Consumer Act 2010, Do Not Call Register Act 2006,
           and the Telecommunications Act 1997.
         </p>
         <p>
           You can also request to be added to our No Contact List at any time, to ensure we do not
-          send you further marketing communications. Simply contact us via:
+          send you further marketing communications for a period of two years (renewable). Simply
+          contact us via:
         </p>
         <p>
           <a href={`mailto:${DEMO.email}`} style={{ color: BRAND.teal }}>{DEMO.email}</a>
