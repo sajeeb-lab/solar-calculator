@@ -15,6 +15,10 @@ import { calculateEstimate, fmtCurrencyRange, fmtKwhRange } from "../data/rebate
 const DEMO = {
   company: "Solar Growth System",
   calendarUrl: "https://growthlocal.com.au/schedule-solar-growth-system-demo",
+  // The displayed Federal Battery Rebate line is static by request — it does
+  // NOT feed Price After Rebate below, which keeps using the real
+  // state-based calculation from rebateEstimate.js.
+  staticRebateRange: "$5,580 – $7,440",
   // battery size, rebate, savings, and cost figures are now calculated
   // live from the customer's bill and state — see calculateEstimate()
   email: "info@growthlocal.com.au",
@@ -123,7 +127,6 @@ const StepResults = ({ data }) => {
   );
 
   const batteryRangeText = fmtKwhRange(estimate.batteryMin, estimate.batteryMax);
-  const rebateRangeText = fmtCurrencyRange(estimate.rebateMin, estimate.rebateMax);
   const savingsRangeText = fmtCurrencyRange(estimate.savingsMin, estimate.savingsMax);
   const priceBeforeText = fmtCurrencyRange(estimate.costBeforeMin, estimate.costBeforeMax);
   const priceAfterText = fmtCurrencyRange(estimate.costAfterMin, estimate.costAfterMax);
@@ -205,7 +208,7 @@ const StepResults = ({ data }) => {
       {/* ===== Rebates ===== */}
       <SectionTitle>Rebates</SectionTitle>
       <BigFigure>
-        Federal Battery Rebate (Cheaper Home Battery Scheme, since 1 July 2025): {rebateRangeText}
+        Federal Battery Rebate (Cheaper Home Battery Scheme, since 1 July 2025): {DEMO.staticRebateRange}
       </BigFigure>
       <Body>
         The Australian Federal Government wants more Australians to have access to affordable, clean
